@@ -12,6 +12,9 @@ test-cov:
   stage: test
   script:
   - make test-cov
+  artifacts:
+    paths:
+    - htmlcov/
   cache:
     paths:
     - .venv/
