@@ -1,0 +1,52 @@
+image: registry.questioneer.dev/internal/containers/ci/poetry
+
+stages:
+- test
+- build
+
+before_script:
+  - poetry config settings.virtualenvs.in-project true
+  - poetry install
+
+test-cov:
+  stage: test
+  script:
+  - make test
+  - make test-cov
+  artifacts:
+    paths:
+    - htmlcov/
+  cache:
+    paths:
+    - .venv/
+    policy: pull
+
+test-lint:
+  stage: test
+  script:
+  - make lint
+  cache:
+    paths:
+    - .venv/
+    policy: pull-push
+
+test-type:
+  stage: test
+  script:
+  - make type
+  cache:
+    paths:
+    - .venv
+    policy: pull
+
+build:
+  stage: build
+  script:
+  - poetry build
+  artifacts:
+    paths:
+    - dist/
+  cache:
+    paths:
+    - .venv
+    policy: pull
