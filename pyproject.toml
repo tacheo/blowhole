@@ -12,6 +12,9 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.6"
+# Once py.typed is merged, used PyPI version of Typesystem
+typesystem = {git = "https://github.com/pyinv/typesystem.git", branch = "master" }
+pyyaml = "^5.1"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.7"
