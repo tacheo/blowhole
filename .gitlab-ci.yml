@@ -1,0 +1,31 @@
+image: registry.questioneer.dev/internal/containers/ci/poetry
+
+stages:
+- test
+- build
+
+before_script:
+  - poetry install
+
+test-cov:
+  stage: test
+  script:
+  - make test-cov
+
+test-lint:
+  stage: test
+  script:
+  - make lint
+
+test-type:
+  stage: test
+  script:
+  - make type
+
+build:
+  stage: build
+  script:
+  - poetry build
+  artifacts:
+    paths:
+    - dist/
