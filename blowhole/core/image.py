@@ -23,3 +23,9 @@ class ImageName:
             return ImageName(name[0], name[1])
         else:
             raise ValueError("Image name cannot contain multiple tags.")
+
+    def __str__(self) -> str:
+        if self.tag is None:
+            return self.repository
+        else:
+            return self.repository + ":" + self.tag
