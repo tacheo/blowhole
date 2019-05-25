@@ -1,8 +1,10 @@
 """Classes for docker images."""
 
+from functools import total_ordering
 from typing import Optional
 
 
+@total_ordering
 class ImageName:
     """A class for docker image names, defining seperate repository and tags."""
 
@@ -19,6 +21,10 @@ class ImageName:
                 "Cannot compare ImageName to arbitrary object.",
             )
         return self.repository == other.repository and self.tag == other.tag
+
+    def __gt__(self, other: 'ImageName') -> bool:
+        return self.tag is None and other.tag is not None and \
+            self.repository == other.repository
 
     @classmethod
     def from_str(cls, full_name: str) -> 'ImageName':

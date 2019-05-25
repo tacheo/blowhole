@@ -38,3 +38,20 @@ def test_imagename_str() -> None:
 
     assert str(i1) == "CHEESE"
     assert str(i2) == "a/b:C"
+
+
+def test_imagename_comparisons() -> None:
+    """Test comparing image names."""
+    fish1 = ImageName("fish")
+    fish2 = ImageName("fish", "3.6")
+
+    assert fish1 > fish2
+    assert fish1 >= fish2
+    assert not fish1 <= fish2
+    assert not fish1 < fish2
+
+    frog1 = ImageName("Frog", "twenty-seven")
+    frog2 = ImageName("frog", "twenty-seven")
+    assert not frog1 > frog2
+    assert not frog1 >= frog2
+    assert not frog1 == frog2
