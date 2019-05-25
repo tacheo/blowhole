@@ -1,6 +1,12 @@
 blowhole
 ========
 
+.. image:: https://git.questioneer.dev/os/blowhole/badges/master/pipeline.svg
+   :target: https://git.questioneer.dev/os/blowhole/commits/master
+
+.. image:: https://git.questioneer.dev/os/blowhole/badges/master/coverage.svg
+   :target: https://git.questioneer.dev/os/blowhole/commits/master
+
 blowhole is a tool for creating, managing, and using docker-based development (or other) environments.
 
 Features
