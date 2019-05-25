@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "blowhole"
-version = "0.0.1"
+version = "0.0.2"
 description = "blowhole is a tool for creating, managing, and using docker-based development (or other) environments."
 authors = ["Questioneer Limited <hello@questioneer.co.uk>"]
 repository = "https://github.com/questioneer-ltd/blowhole"
