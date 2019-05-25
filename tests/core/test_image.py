@@ -2,7 +2,7 @@
 
 import pytest
 
-from blowhole.core.image import ImageName
+from blowhole.core.image import BuildRecipe, ImageName, RunRecipe
 
 
 def test_imagename_instantiation() -> None:
@@ -61,3 +61,20 @@ def test_imagename_equality_with_garbage() -> None:
     """Test comparing an ImageName to random garbage."""
     with pytest.raises(NotImplementedError):
         ImageName("e") == ["humpty", "dumpty", "had", "a", "great", "fall"]
+
+
+def test_buildrecipe() -> None:
+    """Create some build recipes."""
+    BuildRecipe(["FROM ubuntu", "RUN rm -rf /", "EXPOSE 8080"])
+    BuildRecipe([], ImageName("empty"))
+
+
+def test_runrecipe() -> None:
+    """Create some run recipes."""
+    RunRecipe()
+    RunRecipe(
+        ["ping 127.0.0.1 -n 1"],
+        [(8080, 3030), (1, 2)],
+        [("/var/sock/example", "/var/sock/otherexample")],
+        [("/beans", "/fries"), ("/toast", "/bread")],
+    )

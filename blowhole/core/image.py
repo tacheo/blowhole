@@ -1,7 +1,7 @@
 """Classes for docker images."""
 
 from functools import total_ordering
-from typing import Optional
+from typing import List, Optional, Tuple
 
 
 @total_ordering
@@ -42,3 +42,30 @@ class ImageName:
             return self.repository
         else:
             return self.repository + ":" + self.tag
+
+
+class BuildRecipe:
+    """A set of instructions to build an image."""
+
+    def __init__(
+        self,
+        dockerfile_commands: List[str],
+        name: Optional[ImageName] = None,
+    ):
+        self.dockerfile_commands = dockerfile_commands
+        self.name = name
+
+
+class RunRecipe:
+    """A set of instructions to set up a running image."""
+
+    def __init__(
+        self,
+        script: Optional[List[str]] = None,
+        ports: Optional[List[Tuple[int, int]]] = None,
+        sockets: Optional[List[Tuple[str, str]]] = None,
+        volumes: Optional[List[Tuple[str, str]]] = None,
+    ):
+        self.script = script
+        self.sockets = sockets
+        self.volumes = volumes
