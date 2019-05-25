@@ -13,6 +13,13 @@ class ImageName:
         self.repository = repository
         self.tag = tag
 
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, ImageName):
+            raise NotImplementedError(
+                "Cannot compare ImageName to arbitrary object.",
+            )
+        return self.repository == other.repository and self.tag == other.tag
+
     @classmethod
     def from_str(cls, full_name: str) -> 'ImageName':
         """Takes a full image name string and returns equivalent ImageName."""
