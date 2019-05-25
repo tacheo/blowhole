@@ -55,3 +55,9 @@ def test_imagename_comparisons() -> None:
     assert not frog1 > frog2
     assert not frog1 >= frog2
     assert not frog1 == frog2
+
+
+def test_imagename_equality_with_garbage() -> None:
+    """Test comparing an ImageName to random garbage."""
+    with pytest.raises(NotImplementedError):
+        ImageName("e") == ["humpty", "dumpty", "had", "a", "great", "fall"]
