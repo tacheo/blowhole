@@ -5,19 +5,26 @@ Handles loading and nice errors.
 """
 
 from abc import ABCMeta
-from typing import TextIO, Type
+from typing import TextIO, Type, TypeVar, cast
 
-from typesystem import Schema, tokenize_yaml, validate_with_positions
+from ruamel.yaml import YAML
+from typesystem import Schema
+
+
+class ConfigurationError(Exception):
+    """Bad configarion."""
+
+
+T = TypeVar("T", bound='Configuration')
 
 
 class Configuration(Schema, metaclass=ABCMeta):
     """Base configuration class."""
 
     @classmethod
-    def load_file(cls, fp: TextIO) -> Type['Configuration']:
+    def load_file(cls: Type[T], fp: TextIO) -> T:
         """Load the configuration from a file-like object."""
-        data = fp.read()
-        token = tokenize_yaml(data)
+        yaml = YAML()
+        data = yaml.load(fp)
 
-        # The below type is ignored due to limitations with Typesystem.
-        return validate_with_positions(token=token, validator=cls)  # type: ignore
+        return cast(T, cls.validate(data))
