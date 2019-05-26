@@ -68,5 +68,6 @@ class RunRecipe:
         volumes: Optional[List[Tuple[str, str]]] = None,
     ):
         self.script = script
+        self.ports = ports
         self.sockets = sockets
         self.volumes = volumes
