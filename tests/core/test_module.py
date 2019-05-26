@@ -1,7 +1,7 @@
 """Test module classes."""
 
 from blowhole.core.image import BuildRecipe, ImageName, RunRecipe
-from blowhole.core.module import Component
+from blowhole.core.module import Component, Module
 
 
 def test_component_initialisation() -> None:
@@ -39,3 +39,9 @@ def test_component_should_run() -> None:
     assert c2.should_run(i4)
     assert c2.should_run(i5)
     assert c2.should_run(i6)
+
+
+def test_module_instantiation() -> None:
+    """Test creating modules."""
+    Module("example", [Component(RunRecipe())])
+    Module("banana", [], "adds random bananas to your shell")
