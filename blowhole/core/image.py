@@ -1,10 +1,8 @@
 """Classes for docker images."""
 
-from functools import total_ordering
 from typing import List, Optional, Tuple
 
 
-@total_ordering
 class ImageName:
     """A class for docker image names, defining seperate repository and tags."""
 
@@ -22,9 +20,12 @@ class ImageName:
             )
         return self.repository == other.repository and self.tag == other.tag
 
-    def __gt__(self, other: 'ImageName') -> bool:
-        return self.tag is None and other.tag is not None and \
+    def is_compatible(self, other: 'ImageName') -> bool:
+        """Determine if an ImageName is compatible with another."""
+        return (self == other) or (
             self.repository == other.repository
+            and self.tag is None
+        )
 
     @classmethod
     def from_str(cls, full_name: str) -> 'ImageName':

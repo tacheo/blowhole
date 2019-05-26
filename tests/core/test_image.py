@@ -45,16 +45,14 @@ def test_imagename_comparisons() -> None:
     fish1 = ImageName("fish")
     fish2 = ImageName("fish", "3.6")
 
-    assert fish1 > fish2
-    assert fish1 >= fish2
-    assert not fish1 <= fish2
-    assert not fish1 < fish2
+    assert fish1.is_compatible(fish2)
+    assert not fish2.is_compatible(fish1)
 
     frog1 = ImageName("Frog", "twenty-seven")
     frog2 = ImageName("frog", "twenty-seven")
-    assert not frog1 > frog2
-    assert not frog1 >= frog2
-    assert not frog1 == frog2
+
+    assert not frog1.is_compatible(frog2)
+    assert not frog2.is_compatible(frog1)
 
 
 def test_imagename_equality_with_garbage() -> None:
