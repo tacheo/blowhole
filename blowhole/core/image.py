@@ -29,7 +29,7 @@ class ImageName:
 
     @classmethod
     def from_str(cls, full_name: str) -> 'ImageName':
-        """Takes a full image name string and returns equivalent ImageName."""
+        """Take a fully qualified image name and returns an ImageName instance."""
         name = full_name.split(":")
         if len(name) == 1:
             return ImageName(name[0])
