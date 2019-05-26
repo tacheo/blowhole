@@ -73,10 +73,10 @@ class RunRecipe:
 
     def __init__(
         self,
-        script: Optional[List[str]] = None,
-        ports: Optional[List[Tuple[int, int]]] = None,
-        sockets: Optional[List[Tuple[str, str]]] = None,
-        volumes: Optional[List[Tuple[str, str]]] = None,
+        script: List[str] = [],
+        ports: List[Tuple[int, int]] = [],
+        sockets: List[Tuple[str, str]] = [],
+        volumes: List[Tuple[str, str]] = [],
     ):
         self.script = script
         self.ports = ports
