@@ -47,8 +47,11 @@ def test_imagename_repr() -> None:
     i3 = ImageName("%^£\"'__3", "&**((£)_!:£~!!!")
 
     assert repr(i1) == "ImageName('a')"
+    assert eval(repr(i1)) == i1
     assert repr(i2) == "ImageName('one', 'two')"
+    assert eval(repr(i2)) == i2
     assert repr(i3) == "ImageName('%^£\"\\'__3', '&**((£)_!:£~!!!')"
+    assert eval(repr(i3)) == i3
 
 
 def test_imagename_comparisons() -> None:
