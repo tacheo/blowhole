@@ -44,6 +44,17 @@ class ImageName:
         else:
             return self.repository + ":" + self.tag
 
+    def __repr__(self) -> str:
+        if self.tag is None:
+            return "ImageName(" + repr(self.repository) + ")"
+        else:
+            return "ImageName(" \
+                + repr(self.repository) \
+                + ", " \
+                + repr(self.tag) \
+                + ")" \
+
+
 
 class BuildRecipe:
     """A set of instructions to build an image."""

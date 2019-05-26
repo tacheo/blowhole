@@ -40,6 +40,17 @@ def test_imagename_str() -> None:
     assert str(i2) == "a/b:C"
 
 
+def test_imagename_repr() -> None:
+    """Test evaluable string representations of ImageName."""
+    i1 = ImageName("a")
+    i2 = ImageName("one", "two")
+    i3 = ImageName("%^£\"'__3", "&**((£)_!:£~!!!")
+
+    assert repr(i1) == "ImageName('a')"
+    assert repr(i2) == "ImageName('one', 'two')"
+    assert repr(i3) == "ImageName('%^£\"\\'__3', '&**((£)_!:£~!!!')"
+
+
 def test_imagename_comparisons() -> None:
     """Test comparing image names."""
     fish1 = ImageName("fish")
