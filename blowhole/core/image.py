@@ -95,3 +95,44 @@ class RunRecipe:
         self.ports = ports
         self.sockets = sockets
         self.volumes = volumes
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, RunRecipe):
+            raise NotImplementedError(
+                "Cannot compare RunRecipe to arbitrary object.",
+            )
+        return all([
+            self.script == other.script,
+            self.ports == other.ports,
+            self.sockets == other.sockets,
+            self.volumes == other.volumes,
+        ])
+
+    def __str__(self) -> str:
+        r = "RunRecipe ("
+
+        if self.script != []:
+            r += f"\n\tscript={self.script},"
+
+        if self.ports != []:
+            r += f"\n\tports={self.ports},"
+
+        if self.sockets != []:
+            r += f"\n\tsockets={self.sockets},"
+
+        if self.volumes != []:
+            r += f"\n\tvolumes={self.volumes},"
+
+        r += "\n)"
+
+        return r
+
+    def __repr__(self) -> str:
+        return (
+            "RunRecipe("
+            f"script={self.script!r},"
+            f"ports={self.ports!r},"
+            f"sockets={self.sockets!r},"
+            f"volumes={self.volumes!r}"
+            ")"
+        )

@@ -134,3 +134,58 @@ def test_runrecipe_instantiation() -> None:
         sockets=[("/var/sock/example", "/var/sock/otherexample")],
         volumes=[("/beans", "/fries"), ("/toast", "/bread")],
     )
+
+
+def test_runrecipe_eq() -> None:
+    """Test equality of RunRecipes."""
+    r1 = RunRecipe()
+    r2 = RunRecipe(
+        script=["ls"],
+        ports=[(123, 456), (2, 3)],
+        sockets=[("/var/yargh", "/var/aaargh")],
+        volumes=[("/fish", "/fingers")],
+    )
+    r3 = RunRecipe(
+        script=["ls"],
+        ports=[(123, 456), (2, 3)],
+        sockets=[("/var/yargh", "/var/aaargh")],
+        volumes=[("/fish", "/fingers")],
+    )
+    r4 = RunRecipe(
+        script=["ls -l"],
+        ports=[(123, 456), (2, 3)],
+        sockets=[("/var/yargh", "/var/aaargh")],
+        volumes=[("/fish", "/fingers")],
+    )
+
+    assert r1 == r1
+    assert r2 == r3 and r3 == r2
+    assert r1 != r2 and r2 != r1
+    assert r2 != r4 and r4 != r2
+
+
+def test_runrecipe_eq_garbage() -> None:
+    """Test equating RunRecipe with random garbage."""
+    with pytest.raises(NotImplementedError):
+        RunRecipe() == 42
+
+
+def test_runrecipe_str() -> None:
+    """Test string representations of RunRecipe."""
+    r = RunRecipe(
+        script=["a"],
+        ports=[(1, 2)],
+        sockets=[("abc", "def")],
+        volumes=[("ping", "pong")],
+    )
+
+    assert str(r) == (
+        "RunRecipe ("
+        f"\n\tscript={['a']},"
+        f"\n\tports={[(1, 2)]},"
+        f"\n\tsockets={[('abc', 'def')]},"
+        f"\n\tvolumes={[('ping', 'pong')]},"
+        "\n)"
+    )
+
+    assert eval(repr(r)) == r
