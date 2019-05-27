@@ -2,6 +2,7 @@ image: registry.questioneer.dev/internal/containers/ci/poetry
 
 stages:
 - test
+- test-multiversion
 - build
 
 before_script:
@@ -38,6 +39,36 @@ test-type:
     paths:
     - .venv
     policy: pull
+
+test-3.6:
+  stage: test-multiversion
+  image: registry.questioneer.dev/internal/containers/ci/poetry-3.6
+  script:
+  - make test
+  cache:
+    key: "3.6"
+    paths:
+    - .venv/
+
+test-3.7:
+  stage: test-multiversion
+  image: registry.questioneer.dev/internal/containers/ci/poetry-3.7
+  script:
+  - make test
+  cache:
+    key: "3.7"
+    paths:
+    - .venv/
+
+test-3.8-rc:
+  stage: test-multiversion
+  image: registry.questioneer.dev/internal/containers/ci/poetry-3.8-rc
+  script:
+  - make test
+  cache:
+    key: "3.8-rc"
+    paths:
+    - .venv/
 
 build:
   stage: build
