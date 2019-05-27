@@ -46,9 +46,9 @@ class ImageName:
 
     def __repr__(self) -> str:
         if self.tag is None:
-            return f"ImageName({repr(self.repository)})"
+            return f"ImageName({self.repository!r})"
         else:
-            return f"ImageName({repr(self.repository)}, {repr(self.tag)})"
+            return f"ImageName({self.repository!r}, {self.tag!r})"
 
 
 class BuildRecipe:
