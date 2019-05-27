@@ -129,8 +129,8 @@ def test_runrecipe() -> None:
     """Create some run recipes."""
     RunRecipe()
     RunRecipe(
-        ["ping 127.0.0.1 -n 1"],
-        [(8080, 3030), (1, 2)],
-        [("/var/sock/example", "/var/sock/otherexample")],
-        [("/beans", "/fries"), ("/toast", "/bread")],
+        script=["ping 127.0.0.1 -n 1"],
+        ports=[(8080, 3030), (1, 2)],
+        sockets=[("/var/sock/example", "/var/sock/otherexample")],
+        volumes=[("/beans", "/fries"), ("/toast", "/bread")],
     )

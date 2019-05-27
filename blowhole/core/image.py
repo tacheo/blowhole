@@ -85,7 +85,7 @@ class RunRecipe:
     """A set of instructions to set up a running image."""
 
     def __init__(
-        self,
+        self, *,
         script: List[str] = [],
         ports: List[Tuple[int, int]] = [],
         sockets: List[Tuple[str, str]] = [],

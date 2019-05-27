@@ -8,7 +8,7 @@ def test_component_initialisation() -> None:
     """Test creating components."""
     Component(BuildRecipe(["RUN cd ."]))
     Component(
-        RunRecipe(["a", "b"]),
+        RunRecipe(script=["a", "b"]),
         [ImageName.from_str("a/b:c"), ImageName("qwerty", "uiop")],
         "does absolutely nothing",
     )
