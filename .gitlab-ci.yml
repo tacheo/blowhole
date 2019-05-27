@@ -69,6 +69,7 @@ test-3.8-rc:
     key: "3.8-rc"
     paths:
     - .venv/
+  allow_failure: true
 
 build:
   stage: build
