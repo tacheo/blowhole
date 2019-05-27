@@ -62,6 +62,23 @@ class BuildRecipe:
         self.dockerfile_commands = dockerfile_commands
         self.name = name
 
+    def __str__(self) -> str:
+        if self.name is None:
+            r = "BuildRecipe :"
+        else:
+            r = "BuildRecipe {self.name} :"
+
+        for c in self.dockerfile_commands:
+            r += f"\n{c}"
+
+        return r
+
+    def __repr__(self) -> str:
+        if self.name is None:
+            return f"BuildRecipe({self.dockerfile_commands!r})"
+        else:
+            return f"BuildRecipe({self.dockerfile_commands!r}, {self.name!r})"
+
 
 class RunRecipe:
     """A set of instructions to set up a running image."""
