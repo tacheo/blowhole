@@ -23,7 +23,15 @@ class ConfigModel(BaseModel):
     @classmethod
     def load_from_file(cls: Type[T], fp: TextIO) -> T:
         """Load a ConfigModel object from a file."""
-        fp.read()
-        return cls(
-            file=fp.name,
-        )
+        yaml = YAML()
+
+        data = yaml.load(fp)
+        if data is None:
+            return cls(
+                file=fp.name,
+            )
+        else:
+            return cls(
+                file=fp.name,
+                **data,
+            )
