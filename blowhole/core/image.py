@@ -62,6 +62,16 @@ class BuildRecipe:
         self.dockerfile_commands = dockerfile_commands
         self.name = name
 
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, BuildRecipe):
+            raise NotImplementedError(
+                "Cannot compare BuildRecipe to arbitrary object.",
+            )
+        return (
+            self.dockerfile_commands == other.dockerfile_commands
+            and self.name == other.name
+        )
+
     def __str__(self) -> str:
         if self.name is None:
             r = "BuildRecipe ["
