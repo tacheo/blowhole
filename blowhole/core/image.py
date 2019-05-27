@@ -64,12 +64,14 @@ class BuildRecipe:
 
     def __str__(self) -> str:
         if self.name is None:
-            r = "BuildRecipe :"
+            r = "BuildRecipe ["
         else:
-            r = "BuildRecipe {self.name} :"
+            r = f"BuildRecipe {self.name} ["
 
         for c in self.dockerfile_commands:
-            r += f"\n{c}"
+            r += f"\n\t{c}"
+
+        r += "\n]"
 
         return r
 
