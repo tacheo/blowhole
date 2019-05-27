@@ -15,6 +15,7 @@ python = "^3.6"
 # Once py.typed is merged, used PyPI version of Typesystem
 
 pydantic = "^0.26.0"
+"ruamel.yaml" = "^0.15.96"
 [tool.poetry.dev-dependencies]
 flake8 = "^3.7"
 flake8-commas = "^2.0"

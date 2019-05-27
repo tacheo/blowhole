@@ -4,6 +4,7 @@ from typing import TextIO, Type, TypeVar
 
 from pydantic import BaseModel, Extra
 from pydantic.types import FilePath
+from ruamel.yaml import YAML
 
 T = TypeVar("T", bound='ConfigModel')
 
