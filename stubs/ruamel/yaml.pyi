@@ -1,7 +1,17 @@
-"""Type stubs for ruamel.yaml."""
+"""
+Type stubs for ruamel.yaml.
 
-from typing import Dict, IO, Union
+ruamel.yaml does have type comments, but they are not very strict.
+It does not have a PEP561 marker either, so we can't use them.
+"""
+from pathlib import Path
+from typing import Any, Mapping, Union, IO
+
+
+Loadable = Union[str, Path, IO[str]]
 
 class YAML:
 
-    def load(self, pointer: IO[str]) -> Dict[str, Union[str, int, float]]: ...
+    def __init__(self, typ: str = 'safe', pure: bool = False): ...
+
+    def load(self, stream: Loadable) -> Mapping[str, Any]: ...
