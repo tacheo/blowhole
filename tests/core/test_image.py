@@ -78,15 +78,15 @@ def test_imagename_equality_with_garbage() -> None:
 def test_buildrecipe() -> None:
     """Create some build recipes."""
     BuildRecipe(["FROM ubuntu", "RUN rm -rf /", "EXPOSE 8080"])
-    BuildRecipe([], ImageName("empty"))
+    BuildRecipe([])
 
 
 def test_buildrecipe_eq() -> None:
     """Test equality of build recipes."""
-    b1 = BuildRecipe(["a", "b"], ImageName("q", "d"))
-    b2 = BuildRecipe(["a", "b"], ImageName("q", "d"))
-    b3 = BuildRecipe(["a"], ImageName("q", "d"))
-    b4 = BuildRecipe(["a", "b"], ImageName("q"))
+    b1 = BuildRecipe(["a", "b"])
+    b2 = BuildRecipe(["a", "b"])
+    b3 = BuildRecipe(["a"])
+    b4 = BuildRecipe(["a", "q"])
 
     assert b1 == b2
     assert b2 == b1
@@ -103,11 +103,11 @@ def test_buildrecipy_eq_garbage() -> None:
 def test_buildrecipe_str() -> None:
     """Test human-readable string representation of BuildRecipe."""
     b1 = BuildRecipe([])
-    b2 = BuildRecipe(["FROM java", "RUN cd ."], ImageName("jaava", "latest"))
+    b2 = BuildRecipe(["FROM java", "RUN cd ."])
 
     assert str(b1) == "BuildRecipe [\n]"
     assert str(b2) == (
-        "BuildRecipe jaava:latest [\n"
+        "BuildRecipe [\n"
         "\tFROM java\n"
         "\tRUN cd .\n"
         "]"
@@ -119,7 +119,6 @@ def test_buildrecipe_repr() -> None:
     b1 = BuildRecipe([])
     b2 = BuildRecipe(
         ["dfafuho&*(*&^%", "8$&__*!", "@~@}{?>?"],
-        ImageName("aaaaaaargh", "eeee3e"),
     )
 
     assert eval(repr(b1)) == b1

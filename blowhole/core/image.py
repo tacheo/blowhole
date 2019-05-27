@@ -57,26 +57,18 @@ class BuildRecipe:
     def __init__(
         self,
         dockerfile_commands: List[str],
-        name: Optional[ImageName] = None,
     ):
         self.dockerfile_commands = dockerfile_commands
-        self.name = name
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, BuildRecipe):
             raise NotImplementedError(
                 "Cannot compare BuildRecipe to arbitrary object.",
             )
-        return (
-            self.dockerfile_commands == other.dockerfile_commands
-            and self.name == other.name
-        )
+        return self.dockerfile_commands == other.dockerfile_commands
 
     def __str__(self) -> str:
-        if self.name is None:
-            r = "BuildRecipe ["
-        else:
-            r = f"BuildRecipe {self.name} ["
+        r = "BuildRecipe ["
 
         for c in self.dockerfile_commands:
             r += f"\n\t{c}"
@@ -86,10 +78,7 @@ class BuildRecipe:
         return r
 
     def __repr__(self) -> str:
-        if self.name is None:
-            return f"BuildRecipe({self.dockerfile_commands!r})"
-        else:
-            return f"BuildRecipe({self.dockerfile_commands!r}, {self.name!r})"
+        return f"BuildRecipe({self.dockerfile_commands!r})"
 
 
 class RunRecipe:
