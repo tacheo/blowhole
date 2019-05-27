@@ -81,6 +81,25 @@ def test_buildrecipe() -> None:
     BuildRecipe([], ImageName("empty"))
 
 
+def test_buildrecipe_eq() -> None:
+    """Test equality of build recipes."""
+    b1 = BuildRecipe(["a", "b"], ImageName("q", "d"))
+    b2 = BuildRecipe(["a", "b"], ImageName("q", "d"))
+    b3 = BuildRecipe(["a"], ImageName("q", "d"))
+    b4 = BuildRecipe(["a", "b"], ImageName("q"))
+
+    assert b1 == b2
+    assert b2 == b1
+    assert b1 != b3 and b3 != b1
+    assert b1 != b4 and b4 != b1
+
+
+def test_buildrecipy_eq_garbage() -> None:
+    """Test equality of build recipe with random garbage."""
+    with pytest.raises(NotImplementedError):
+        BuildRecipe([]) == "I did not hit her, I did not! Oh, hi Mark."
+
+
 def test_buildrecipe_str() -> None:
     """Test human-readable string representation of BuildRecipe."""
     b1 = BuildRecipe([])
