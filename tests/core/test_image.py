@@ -81,6 +81,32 @@ def test_buildrecipe() -> None:
     BuildRecipe([], ImageName("empty"))
 
 
+def test_buildrecipe_str() -> None:
+    """Test human-readable string representation of BuildRecipe."""
+    b1 = BuildRecipe([])
+    b2 = BuildRecipe(["FROM java", "RUN cd ."], ImageName("jaava", "latest"))
+
+    assert str(b1) == "BuildRecipe [\n]"
+    assert str(b2) == (
+        "BuildRecipe jaava:latest [\n"
+        "\tFROM java\n"
+        "\tRUN cd .\n"
+        "]"
+    )
+
+
+def test_buildrecipe_repr() -> None:
+    """Test evaluable string representation of BuildRecipe."""
+    b1 = BuildRecipe([])
+    b2 = BuildRecipe(
+        ["dfafuho&*(*&^%", "8$&__*!", "@~@}{?>?"],
+        ImageName("aaaaaaargh", "eeee3e"),
+    )
+
+    assert eval(repr(b1)) == b1
+    assert eval(repr(b2)) == b2
+
+
 def test_runrecipe() -> None:
     """Create some run recipes."""
     RunRecipe()
