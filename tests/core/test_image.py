@@ -125,7 +125,7 @@ def test_buildrecipe_repr() -> None:
     assert eval(repr(b2)) == b2
 
 
-def test_runrecipe() -> None:
+def test_runrecipe_instantiation() -> None:
     """Create some run recipes."""
     RunRecipe()
     RunRecipe(
