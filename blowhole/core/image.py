@@ -1,24 +1,19 @@
 """Classes for docker images."""
 
+from dataclasses import field
 from typing import List, Optional, Tuple
 
+from pydantic.dataclasses import dataclass
 
-class ImageName:
-    """A class for docker image names, defining seperate repository and tags."""
+from blowhole.core.config import ConfigModel
+
+
+@dataclass
+class ImageName(ConfigModel):
+    """A class for docker image names, defining separate repository and tags."""
 
     repository: str
-    tag: Optional[str]
-
-    def __init__(self, repository: str, tag: Optional[str] = None) -> None:
-        self.repository = repository
-        self.tag = tag
-
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, ImageName):
-            raise NotImplementedError(
-                "Cannot compare ImageName to arbitrary object.",
-            )
-        return self.repository == other.repository and self.tag == other.tag
+    tag: Optional[str] = None
 
     def is_compatible(self, other: 'ImageName') -> bool:
         """Determine if an ImageName is compatible with another."""
@@ -44,69 +39,32 @@ class ImageName:
         else:
             return f"{self.repository}:{self.tag}"
 
-    def __repr__(self) -> str:
-        if self.tag is None:
-            return f"ImageName({self.repository!r})"
-        else:
-            return f"ImageName({self.repository!r}, {self.tag!r})"
 
-
-class BuildRecipe:
+@dataclass
+class BuildRecipe(ConfigModel):
     """A set of instructions to build an image."""
 
-    def __init__(
-        self,
-        dockerfile_commands: List[str],
-    ):
-        self.dockerfile_commands = dockerfile_commands
-
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, BuildRecipe):
-            raise NotImplementedError(
-                "Cannot compare BuildRecipe to arbitrary object.",
-            )
-        return self.dockerfile_commands == other.dockerfile_commands
+    commands: List[str]
 
     def __str__(self) -> str:
         r = "BuildRecipe ["
 
-        for c in self.dockerfile_commands:
+        for c in self.commands:
             r += f"\n\t{c}"
 
         r += "\n]"
 
         return r
 
-    def __repr__(self) -> str:
-        return f"BuildRecipe({self.dockerfile_commands!r})"
 
-
-class RunRecipe:
+@dataclass
+class RunRecipe(ConfigModel):
     """A set of instructions to set up a running image."""
 
-    def __init__(
-        self, *,
-        script: List[str] = [],
-        ports: List[Tuple[int, int]] = [],
-        sockets: List[Tuple[str, str]] = [],
-        volumes: List[Tuple[str, str]] = [],
-    ):
-        self.script = script
-        self.ports = ports
-        self.sockets = sockets
-        self.volumes = volumes
-
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, RunRecipe):
-            raise NotImplementedError(
-                "Cannot compare RunRecipe to arbitrary object.",
-            )
-        return all([
-            self.script == other.script,
-            self.ports == other.ports,
-            self.sockets == other.sockets,
-            self.volumes == other.volumes,
-        ])
+    script: List[str] = field(default_factory=list)
+    ports: List[Tuple[int, int]] = field(default_factory=list)
+    sockets: List[Tuple[str, str]] = field(default_factory=list)
+    volumes: List[Tuple[str, str]] = field(default_factory=list)
 
     def __str__(self) -> str:
         r = "RunRecipe ("
@@ -126,13 +84,3 @@ class RunRecipe:
         r += "\n)"
 
         return r
-
-    def __repr__(self) -> str:
-        return (
-            "RunRecipe("
-            f"script={self.script!r},"
-            f"ports={self.ports!r},"
-            f"sockets={self.sockets!r},"
-            f"volumes={self.volumes!r}"
-            ")"
-        )

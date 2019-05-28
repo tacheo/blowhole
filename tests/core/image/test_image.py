@@ -1,8 +1,19 @@
 """Test docker image classes."""
 
+from os import path
+
 import pytest
+from pydantic import ValidationError
 
 from blowhole.core.image import BuildRecipe, ImageName, RunRecipe
+
+CURR_DIR = path.dirname(__file__)
+
+YAML_EMPTY = path.join(CURR_DIR, "files", "empty.yaml")
+
+IMAGENAME_FULL = path.join(CURR_DIR, "files", "imagename_full.yaml")
+IMAGENAME_PARTIAL = path.join(CURR_DIR, "files", "imagename_partial.yaml")
+IMAGENAME_INVALID = path.join(CURR_DIR, "files", "imagename_invalid.yaml")
 
 
 def test_imagename_instantiation() -> None:
@@ -31,6 +42,20 @@ def test_imagename_from_bad_str() -> None:
         ImageName.from_str("a/b:c:d")
 
 
+def test_imagename_eq() -> None:
+    """Test ImageName equality."""
+    i1 = ImageName("abc", "def")
+    i2 = ImageName("abc", "def")
+    i3 = ImageName("abc")
+    i4 = ImageName("asd", "def")
+    i5 = ["humpty", "dumpty", "had", "a", "great", "fall"]
+
+    assert i1 == i2 and i2 == i1
+    assert i1 != i3 and i3 != i1
+    assert i1 != i4 and i4 != i1
+    assert i1 != i5 and i5 != i1
+
+
 def test_imagename_str() -> None:
     """Test string representations of image names."""
     i1 = ImageName("CHEESE")
@@ -46,11 +71,8 @@ def test_imagename_repr() -> None:
     i2 = ImageName("one", "two")
     i3 = ImageName("%^£\"'__3", "&**((£)_!:£~!!!")
 
-    assert repr(i1) == "ImageName('a')"
     assert eval(repr(i1)) == i1
-    assert repr(i2) == "ImageName('one', 'two')"
     assert eval(repr(i2)) == i2
-    assert repr(i3) == "ImageName('%^£\"\\'__3', '&**((£)_!:£~!!!')"
     assert eval(repr(i3)) == i3
 
 
@@ -60,6 +82,7 @@ def test_imagename_comparisons() -> None:
     fish2 = ImageName("fish", "3.6")
 
     assert fish1.is_compatible(fish2)
+    assert fish2.is_compatible(fish2)
     assert not fish2.is_compatible(fish1)
 
     frog1 = ImageName("Frog", "twenty-seven")
@@ -69,10 +92,34 @@ def test_imagename_comparisons() -> None:
     assert not frog2.is_compatible(frog1)
 
 
-def test_imagename_equality_with_garbage() -> None:
-    """Test comparing an ImageName to random garbage."""
-    with pytest.raises(NotImplementedError):
-        ImageName("e") == ["humpty", "dumpty", "had", "a", "great", "fall"]
+def test_imagename_load_from_empty() -> None:
+    """Test loading empty file as ImageName."""
+    with pytest.raises(TypeError):
+        with open(YAML_EMPTY) as fp:
+            ImageName.load_from_file(fp)
+
+
+def test_imagename_load_full() -> None:
+    """Test loading a full ImageName."""
+    with open(IMAGENAME_FULL) as fp:
+        assert ImageName.load_from_file(fp) == ImageName("banana", "13.76")
+
+
+def test_imagename_load_partial() -> None:
+    """Test loading a partial ImageName."""
+    with open(IMAGENAME_PARTIAL) as fp:
+        assert ImageName.load_from_file(fp) == ImageName("eee")
+
+
+def test_imagename_load_invalid() -> None:
+    """Test loading an invalid ImageName."""
+    with pytest.raises(ValidationError):
+        with open(IMAGENAME_INVALID) as fp:
+            ImageName.load_from_file(fp)
+
+
+BUILDRECIPE_VALID = path.join(CURR_DIR, "files", "buildrecipe_valid.yaml")
+BUILDRECIPE_INVALID = path.join(CURR_DIR, "files", "buildrecipe_invalid.yaml")
 
 
 def test_buildrecipe() -> None:
@@ -93,11 +140,7 @@ def test_buildrecipe_eq() -> None:
     assert b1 != b3 and b3 != b1
     assert b1 != b4 and b4 != b1
 
-
-def test_buildrecipe_eq_garbage() -> None:
-    """Test equality of build recipe with random garbage."""
-    with pytest.raises(NotImplementedError):
-        BuildRecipe([]) == "I did not hit her, I did not! Oh, hi Mark."
+    assert BuildRecipe([]) != "I did not hit her, I did not! Oh, hi Mark."
 
 
 def test_buildrecipe_str() -> None:
@@ -123,6 +166,33 @@ def test_buildrecipe_repr() -> None:
 
     assert eval(repr(b1)) == b1
     assert eval(repr(b2)) == b2
+
+
+def test_buildrecipe_load_valid() -> None:
+    """Test loading a valid BuildRecipe from file."""
+    with open(BUILDRECIPE_VALID) as fp:
+        assert BuildRecipe.load_from_file(fp) == BuildRecipe(commands=[
+            "FROM test",
+            "RUN cd .",
+        ])
+
+
+def test_buildrecipe_load_invalid() -> None:
+    """Test loading an invalid BuildRecipe."""
+    with pytest.raises(ValidationError):
+        with open(BUILDRECIPE_INVALID) as fp:
+            BuildRecipe.load_from_file(fp)
+
+
+def test_buildrecipe_load_empty() -> None:
+    """Test loading empty yaml as a BuildRecipe."""
+    with pytest.raises(TypeError):
+        with open(YAML_EMPTY) as fp:
+            BuildRecipe.load_from_file(fp)
+
+
+RUNRECIPE_VALID = path.join(CURR_DIR, "files", "runrecipe_valid.yaml")
+RUNRECIPE_INVALID = path.join(CURR_DIR, "files", "runrecipe_invalid.yaml")
 
 
 def test_runrecipe_instantiation() -> None:
@@ -163,11 +233,7 @@ def test_runrecipe_eq() -> None:
     assert r1 != r2 and r2 != r1
     assert r2 != r4 and r4 != r2
 
-
-def test_runrecipe_eq_garbage() -> None:
-    """Test equating RunRecipe with random garbage."""
-    with pytest.raises(NotImplementedError):
-        RunRecipe() == 42
+    assert RunRecipe() != 42
 
 
 def test_runrecipe_str() -> None:
@@ -189,3 +255,26 @@ def test_runrecipe_str() -> None:
     )
 
     assert eval(repr(r)) == r
+
+
+def test_runrecipe_load_valid() -> None:
+    """Test loading a valid run recipe from file."""
+    with open(RUNRECIPE_VALID) as fp:
+        assert RunRecipe.load_from_file(fp) == RunRecipe(
+            script=["ping example.com", "git init"],
+            ports=[(3, 2), (7, 204)],
+            sockets=[("/var/opt/example", "/var/opt/otherthing")],
+        )
+
+
+def test_runrecipe_load_invalid() -> None:
+    """Test loading an invalid run recipe from a file."""
+    with pytest.raises(ValidationError):
+        with open(RUNRECIPE_INVALID) as fp:
+            RunRecipe.load_from_file(fp)
+
+
+def test_runrecipe_load_empty() -> None:
+    """Test loading empty yaml as a run recipe."""
+    with open(YAML_EMPTY) as fp:
+        assert RunRecipe.load_from_file(fp) == RunRecipe()

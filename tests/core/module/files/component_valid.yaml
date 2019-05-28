@@ -1,0 +1,8 @@
+recipe:
+  commands:
+  - RUN cd ..
+compatible:
+  - repository: example
+  - repository: test
+    tag: "13.2"
+description: "A very exciting component."

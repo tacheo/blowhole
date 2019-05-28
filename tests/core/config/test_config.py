@@ -1,10 +1,10 @@
 """Test the config model."""
 
 import os
-from pathlib import PurePath
 
-import pydantic
 import pytest
+from pydantic import ValidationError
+from pydantic.dataclasses import dataclass
 
 from blowhole.core.config import ConfigModel
 
@@ -17,48 +17,7 @@ VALID = os.path.join(CURR_DIR, 'files', 'valid.yml')
 
 def test_initialisation() -> None:
     """Test ConfigModel initialisation with expected params."""
-    c = ConfigModel(file=EMPTY)
-    assert isinstance(c.file, PurePath)
-    assert c.file.exists()
-
-
-def test_initialisation_with_bad_type() -> None:
-    """Test ConfigModel initialisation with bad param types."""
-    with pytest.raises(pydantic.ValidationError):
-        ConfigModel(file=1)
-
-
-def test_initialisation_with_wrong_params() -> None:
-    """Test config model initialisation with the wrong number of params."""
-    with pytest.raises(pydantic.ValidationError):
-        ConfigModel(file=EMPTY, bees=True, number=42)
-
-    with pytest.raises(pydantic.ValidationError):
-        ConfigModel()
-
-
-def test_initialisation_with_bad_file_path() -> None:
-    """Test config model initialisation with a file that is non-existent."""
-    # No such file.
-    with pytest.raises(pydantic.ValidationError):
-        ConfigModel(file=BAD)
-
-    # Not a file.
-    with pytest.raises(pydantic.ValidationError):
-        ConfigModel(file=os.path.join('not', 'a', 'file'))
-
-
-def test_validation_of_assignment() -> None:
-    """Test that we validate the assignment of attributes."""
-    c = ConfigModel(file=EMPTY)
-    # We ignore the next line, as we are deliberately breaking types
-    # to see if it throws an error.
-    c.file = EMPTY  # type: ignore
-
-    with pytest.raises(pydantic.ValidationError):
-        # We ignore the next line, as we are deliberately breaking types
-        # to see if it throws an error.
-        c.file = BAD  # type: ignore
+    ConfigModel()
 
 
 def test_load_from_empty_file() -> None:
@@ -67,6 +26,7 @@ def test_load_from_empty_file() -> None:
         ConfigModel.load_from_file(fp)
 
 
+@dataclass
 class MockConfig(ConfigModel):
     """A mock config."""
 
@@ -84,6 +44,10 @@ def test_load_from_file() -> None:
 
 def test_load_invalid_from_file() -> None:
     """Test that we can load a yaml config."""
-    with pytest.raises(pydantic.ValidationError):
+    with pytest.raises(TypeError):
         with open(EMPTY) as fp:
+            MockConfig.load_from_file(fp)
+
+    with pytest.raises(ValidationError):
+        with open(BAD) as fp:
             MockConfig.load_from_file(fp)
