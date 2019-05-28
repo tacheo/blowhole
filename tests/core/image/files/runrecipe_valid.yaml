@@ -1,0 +1,9 @@
+script:
+- ping example.com
+- git init
+ports:
+- [3, 2]
+- [7, 204]
+sockets:
+- ["/var/opt/example", "/var/opt/otherthing"]
+volumes: []

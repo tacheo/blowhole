@@ -191,6 +191,10 @@ def test_buildrecipe_load_empty() -> None:
             BuildRecipe.load_from_file(fp)
 
 
+RUNRECIPE_VALID = path.join(CURR_DIR, "files", "runrecipe_valid.yaml")
+RUNRECIPE_INVALID = path.join(CURR_DIR, "files", "runrecipe_invalid.yaml")
+
+
 def test_runrecipe_instantiation() -> None:
     """Create some run recipes."""
     RunRecipe()
@@ -251,3 +255,26 @@ def test_runrecipe_str() -> None:
     )
 
     assert eval(repr(r)) == r
+
+
+def test_runrecipe_load_valid() -> None:
+    """Test loading a valid run recipe from file."""
+    with open(RUNRECIPE_VALID) as fp:
+        assert RunRecipe.load_from_file(fp) == RunRecipe(
+            script=["ping example.com", "git init"],
+            ports=[(3, 2), (7, 204)],
+            sockets=[("/var/opt/example", "/var/opt/otherthing")],
+        )
+
+
+def test_runrecipe_load_invalid() -> None:
+    """Test loading an invalid run recipe from a file."""
+    with pytest.raises(ValidationError):
+        with open(RUNRECIPE_INVALID) as fp:
+            RunRecipe.load_from_file(fp)
+
+
+def test_runrecipe_load_empty() -> None:
+    """Test loading empty yaml as a run recipe."""
+    with open(YAML_EMPTY) as fp:
+        assert RunRecipe.load_from_file(fp) == RunRecipe()

@@ -58,7 +58,7 @@ class BuildRecipe(ConfigModel):
 
 
 @dataclass
-class RunRecipe:
+class RunRecipe(ConfigModel):
     """A set of instructions to set up a running image."""
 
     script: List[str] = field(default_factory=list)
