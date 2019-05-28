@@ -10,7 +10,7 @@ from blowhole.core.config import ConfigModel
 
 @dataclass
 class ImageName(ConfigModel):
-    """A class for docker image names, defining seperate repository and tags."""
+    """A class for docker image names, defining separate repository and tags."""
 
     repository: str
     tag: Optional[str] = None
