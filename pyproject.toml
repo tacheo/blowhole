@@ -12,6 +12,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.6"
+click = "^7.0"
 docker = "^4.0"
 pydantic = "^0.26.0"
 "ruamel.yaml" = "^0.15.96"
@@ -31,6 +32,10 @@ pytest = "^4.5"
 pytest-cov = "^2.7"
 rope = "^0.14.0"
 isort = {version = "^4.3",extras = ["pyproject"]}
+
+[tool.poetry.scripts]
+blowhole = 'blowhole.cli:cli'
+bh = 'blowhole.cli:cli'
 
 [build-system]
 requires = ["poetry>=0.12"]
