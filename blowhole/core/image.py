@@ -37,34 +37,21 @@ class ImageName:
             return f"{self.repository}:{self.tag}"
 
 
+@dataclass
 class BuildRecipe:
     """A set of instructions to build an image."""
 
-    def __init__(
-        self,
-        dockerfile_commands: List[str],
-    ):
-        self.dockerfile_commands = dockerfile_commands
-
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, BuildRecipe):
-            raise NotImplementedError(
-                "Cannot compare BuildRecipe to arbitrary object.",
-            )
-        return self.dockerfile_commands == other.dockerfile_commands
+    commands: List[str]
 
     def __str__(self) -> str:
         r = "BuildRecipe ["
 
-        for c in self.dockerfile_commands:
+        for c in self.commands:
             r += f"\n\t{c}"
 
         r += "\n]"
 
         return r
-
-    def __repr__(self) -> str:
-        return f"BuildRecipe({self.dockerfile_commands!r})"
 
 
 class RunRecipe:

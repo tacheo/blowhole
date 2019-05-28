@@ -98,11 +98,7 @@ def test_buildrecipe_eq() -> None:
     assert b1 != b3 and b3 != b1
     assert b1 != b4 and b4 != b1
 
-
-def test_buildrecipe_eq_garbage() -> None:
-    """Test equality of build recipe with random garbage."""
-    with pytest.raises(NotImplementedError):
-        BuildRecipe([]) == "I did not hit her, I did not! Oh, hi Mark."
+    assert BuildRecipe([]) != "I did not hit her, I did not! Oh, hi Mark."
 
 
 def test_buildrecipe_str() -> None:
