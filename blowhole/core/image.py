@@ -2,23 +2,15 @@
 
 from typing import List, Optional, Tuple
 
+from pydantic.dataclasses import dataclass
 
+
+@dataclass
 class ImageName:
     """A class for docker image names, defining seperate repository and tags."""
 
     repository: str
-    tag: Optional[str]
-
-    def __init__(self, repository: str, tag: Optional[str] = None) -> None:
-        self.repository = repository
-        self.tag = tag
-
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, ImageName):
-            raise NotImplementedError(
-                "Cannot compare ImageName to arbitrary object.",
-            )
-        return self.repository == other.repository and self.tag == other.tag
+    tag: Optional[str] = None
 
     def is_compatible(self, other: 'ImageName') -> bool:
         """Determine if an ImageName is compatible with another."""
@@ -43,12 +35,6 @@ class ImageName:
             return self.repository
         else:
             return f"{self.repository}:{self.tag}"
-
-    def __repr__(self) -> str:
-        if self.tag is None:
-            return f"ImageName({self.repository!r})"
-        else:
-            return f"ImageName({self.repository!r}, {self.tag!r})"
 
 
 class BuildRecipe:

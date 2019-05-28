@@ -31,6 +31,20 @@ def test_imagename_from_bad_str() -> None:
         ImageName.from_str("a/b:c:d")
 
 
+def test_imagename_eq() -> None:
+    """Test ImageName equality."""
+    i1 = ImageName("abc", "def")
+    i2 = ImageName("abc", "def")
+    i3 = ImageName("abc")
+    i4 = ImageName("asd", "def")
+    i5 = ["humpty", "dumpty", "had", "a", "great", "fall"]
+
+    assert i1 == i2 and i2 == i1
+    assert i1 != i3 and i3 != i1
+    assert i1 != i4 and i4 != i1
+    assert i1 != i5 and i5 != i1
+
+
 def test_imagename_str() -> None:
     """Test string representations of image names."""
     i1 = ImageName("CHEESE")
@@ -46,11 +60,8 @@ def test_imagename_repr() -> None:
     i2 = ImageName("one", "two")
     i3 = ImageName("%^£\"'__3", "&**((£)_!:£~!!!")
 
-    assert repr(i1) == "ImageName('a')"
     assert eval(repr(i1)) == i1
-    assert repr(i2) == "ImageName('one', 'two')"
     assert eval(repr(i2)) == i2
-    assert repr(i3) == "ImageName('%^£\"\\'__3', '&**((£)_!:£~!!!')"
     assert eval(repr(i3)) == i3
 
 
@@ -67,12 +78,6 @@ def test_imagename_comparisons() -> None:
 
     assert not frog1.is_compatible(frog2)
     assert not frog2.is_compatible(frog1)
-
-
-def test_imagename_equality_with_garbage() -> None:
-    """Test comparing an ImageName to random garbage."""
-    with pytest.raises(NotImplementedError):
-        ImageName("e") == ["humpty", "dumpty", "had", "a", "great", "fall"]
 
 
 def test_buildrecipe() -> None:
