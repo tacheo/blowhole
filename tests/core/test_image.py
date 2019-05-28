@@ -164,11 +164,7 @@ def test_runrecipe_eq() -> None:
     assert r1 != r2 and r2 != r1
     assert r2 != r4 and r4 != r2
 
-
-def test_runrecipe_eq_garbage() -> None:
-    """Test equating RunRecipe with random garbage."""
-    with pytest.raises(NotImplementedError):
-        RunRecipe() == 42
+    assert RunRecipe() != 42
 
 
 def test_runrecipe_str() -> None:

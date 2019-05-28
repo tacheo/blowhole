@@ -1,5 +1,6 @@
 """Classes for docker images."""
 
+from dataclasses import field
 from typing import List, Optional, Tuple
 
 from pydantic.dataclasses import dataclass
@@ -54,32 +55,14 @@ class BuildRecipe:
         return r
 
 
+@dataclass
 class RunRecipe:
     """A set of instructions to set up a running image."""
 
-    def __init__(
-        self, *,
-        script: List[str] = [],
-        ports: List[Tuple[int, int]] = [],
-        sockets: List[Tuple[str, str]] = [],
-        volumes: List[Tuple[str, str]] = [],
-    ):
-        self.script = script
-        self.ports = ports
-        self.sockets = sockets
-        self.volumes = volumes
-
-    def __eq__(self, other: object) -> bool:
-        if not isinstance(other, RunRecipe):
-            raise NotImplementedError(
-                "Cannot compare RunRecipe to arbitrary object.",
-            )
-        return all([
-            self.script == other.script,
-            self.ports == other.ports,
-            self.sockets == other.sockets,
-            self.volumes == other.volumes,
-        ])
+    script: List[str] = field(default_factory=list)
+    ports: List[Tuple[int, int]] = field(default_factory=list)
+    sockets: List[Tuple[str, str]] = field(default_factory=list)
+    volumes: List[Tuple[str, str]] = field(default_factory=list)
 
     def __str__(self) -> str:
         r = "RunRecipe ("
@@ -99,13 +82,3 @@ class RunRecipe:
         r += "\n)"
 
         return r
-
-    def __repr__(self) -> str:
-        return (
-            "RunRecipe("
-            f"script={self.script!r},"
-            f"ports={self.ports!r},"
-            f"sockets={self.sockets!r},"
-            f"volumes={self.volumes!r}"
-            ")"
-        )
