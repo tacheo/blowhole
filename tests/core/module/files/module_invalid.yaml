@@ -1,0 +1,14 @@
+name: example module
+description: A module which is also an example!
+components:
+- recipe:
+    commands:
+    - FROM example-image
+    - RUN some-setup-cmd
+- recipe:
+    script:
+    - ./fix-bug.sh --version 19.07
+  compatible:
+    repository: example-image
+    tag: 19.07
+- "Oh noes, this shouldn't be here!"

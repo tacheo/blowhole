@@ -77,7 +77,43 @@ def test_component_load_empty() -> None:
             Component.load_from_file(fp)
 
 
+MODULE_VALID = path.join(CURR_DIR, "files", "module_valid.yaml")
+MODULE_INVALID = path.join(CURR_DIR, "files", "module_invalid.yaml")
+
+
 def test_module_instantiation() -> None:
     """Test creating modules."""
     Module("example", [Component(RunRecipe())])
     Module("banana", [], "adds random bananas to your shell")
+
+
+def test_module_load_valid() -> None:
+    """Test loading a module from a file."""
+    with open(MODULE_VALID) as fp:
+        assert Module.load_from_file(fp) == Module(
+            name="example module",
+            description="A module which is also an example!",
+            components=[
+                Component(BuildRecipe(
+                    commands=["FROM example-image", "RUN some-setup-cmd"],
+                )),
+                Component(
+                    RunRecipe(script=["./fix-bug.sh --version 19.07"]),
+                    compatible=[ImageName("example-image", "19.07")],
+                ),
+            ],
+        )
+
+
+def test_module_load_invalid() -> None:
+    """Test loading an invalid module."""
+    with pytest.raises(ValidationError):
+        with open(MODULE_INVALID) as fp:
+            Module.load_from_file(fp)
+
+
+def test_module_load_empty() -> None:
+    """Test loading an empty yaml file as a module."""
+    with pytest.raises(TypeError):
+        with open(YAML_EMPTY) as fp:
+            Module.load_from_file(fp)

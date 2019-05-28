@@ -28,7 +28,7 @@ class Component(ConfigModel):
 
 
 @dataclass
-class Module:
+class Module(ConfigModel):
     """An individual pluggable component of an image."""
 
     name: str
