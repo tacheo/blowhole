@@ -41,7 +41,7 @@ class ImageName(ConfigModel):
 
 
 @dataclass
-class BuildRecipe:
+class BuildRecipe(ConfigModel):
     """A set of instructions to build an image."""
 
     commands: List[str]

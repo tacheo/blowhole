@@ -118,6 +118,10 @@ def test_imagename_load_invalid() -> None:
             ImageName.load_from_file(fp)
 
 
+BUILDRECIPE_VALID = path.join(CURR_DIR, "files", "buildrecipe_valid.yaml")
+BUILDRECIPE_INVALID = path.join(CURR_DIR, "files", "buildrecipe_invalid.yaml")
+
+
 def test_buildrecipe() -> None:
     """Create some build recipes."""
     BuildRecipe(["FROM ubuntu", "RUN rm -rf /", "EXPOSE 8080"])
@@ -162,6 +166,29 @@ def test_buildrecipe_repr() -> None:
 
     assert eval(repr(b1)) == b1
     assert eval(repr(b2)) == b2
+
+
+def test_buildrecipe_load_valid() -> None:
+    """Test loading a valid BuildRecipe from file."""
+    with open(BUILDRECIPE_VALID) as fp:
+        assert BuildRecipe.load_from_file(fp) == BuildRecipe(commands=[
+            "FROM test",
+            "RUN cd .",
+        ])
+
+
+def test_buildrecipe_load_invalid() -> None:
+    """Test loading an invalid BuildRecipe."""
+    with pytest.raises(ValidationError):
+        with open(BUILDRECIPE_INVALID) as fp:
+            BuildRecipe.load_from_file(fp)
+
+
+def test_buildrecipe_load_empty() -> None:
+    """Test loading empty yaml as a BuildRecipe."""
+    with pytest.raises(TypeError):
+        with open(YAML_EMPTY) as fp:
+            BuildRecipe.load_from_file(fp)
 
 
 def test_runrecipe_instantiation() -> None:
