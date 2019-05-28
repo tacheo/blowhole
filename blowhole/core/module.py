@@ -2,21 +2,18 @@
 
 from typing import List, Optional, Union
 
+from pydantic.dataclasses import dataclass
+
 from blowhole.core.image import BuildRecipe, ImageName, RunRecipe
 
 
+@dataclass
 class Component:
     """An executable part of a module."""
 
-    def __init__(
-        self,
-        recipe: Union[BuildRecipe, RunRecipe],
-        compatible: Optional[List[ImageName]] = None,
-        description: Optional[str] = None,
-    ):
-        self.recipe = recipe
-        self.compatible = compatible
-        self.description = description
+    recipe: Union[BuildRecipe, RunRecipe]
+    compatible: Optional[List[ImageName]] = None
+    description: Optional[str] = None
 
     def should_run(self, source_image: ImageName) -> bool:
         """Should this component be executed for a given source image."""
