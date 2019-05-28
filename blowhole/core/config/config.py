@@ -2,17 +2,16 @@
 
 from typing import TextIO, Type, TypeVar
 
-from pydantic import BaseModel, Extra
-from pydantic.types import FilePath
+from pydantic import Extra
+from pydantic.dataclasses import dataclass
 from ruamel.yaml import YAML
 
 T = TypeVar("T", bound='ConfigModel')
 
 
-class ConfigModel(BaseModel):
+@dataclass
+class ConfigModel:
     """A base configuration class."""
-
-    file: FilePath
 
     class Config:
         """Configure the configuration model."""
@@ -27,11 +26,8 @@ class ConfigModel(BaseModel):
 
         data = yaml.load(fp)
         if data is None:
-            return cls(
-                file=fp.name,
-            )
+            return cls()
         else:
-            return cls(
-                file=fp.name,
+            return cls(  # type: ignore
                 **data,
             )
