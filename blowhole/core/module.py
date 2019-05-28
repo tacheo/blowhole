@@ -26,15 +26,10 @@ class Component:
             return False
 
 
+@dataclass
 class Module:
     """An individual pluggable component of an image."""
 
-    def __init__(
-        self,
-        name: str,
-        components: List[Component],
-        description: Optional[str] = None,
-    ):
-        self.name = name
-        self.components = components
-        self.description = description
+    name: str
+    components: List[Component]
+    description: Optional[str] = None
