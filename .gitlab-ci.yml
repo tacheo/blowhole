@@ -60,16 +60,19 @@ test-3.7:
     paths:
     - .venv/
 
-test-3.8-rc:
-  stage: test-multiversion
-  image: registry.questioneer.dev/internal/containers/ci/poetry-3.8-rc
-  script:
-  - make test
-  cache:
-    key: "3.8-rc"
-    paths:
-    - .venv/
-  allow_failure: true
+# Due to ruamel.yaml, python 3.8 does not currently work.
+# Therefore we have commented it out to speed up CI.
+
+# test-3.8-rc:
+#   stage: test-multiversion
+#   image: registry.questioneer.dev/internal/containers/ci/poetry-3.8-rc
+#   script:
+#   - make test
+#   cache:
+#     key: "3.8-rc"
+#     paths:
+#     - .venv/
+#   allow_failure: true
 
 build:
   stage: build
