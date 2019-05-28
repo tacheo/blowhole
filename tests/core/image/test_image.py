@@ -113,8 +113,8 @@ def test_imagename_load_partial() -> None:
 
 def test_imagename_load_invalid() -> None:
     """Test loading an invalid ImageName."""
-    with open(IMAGENAME_INVALID) as fp:
-        with pytest.raises(ValidationError):
+    with pytest.raises(ValidationError):
+        with open(IMAGENAME_INVALID) as fp:
             ImageName.load_from_file(fp)
 
 
