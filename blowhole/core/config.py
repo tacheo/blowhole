@@ -28,6 +28,4 @@ class ConfigModel:
         if data is None:
             return cls()
         else:
-            return cls(  # type: ignore
-                **data,
-            )
+            return cls(**data)  # type: ignore
