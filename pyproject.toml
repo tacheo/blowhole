@@ -17,6 +17,7 @@ docker = "^4.0"
 
 pydantic = "^0.26.0"
 "ruamel.yaml" = "^0.15.96"
+click = "^7.0"
 [tool.poetry.dev-dependencies]
 flake8 = "^3.7"
 flake8-commas = "^2.0"
