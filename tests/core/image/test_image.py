@@ -1,8 +1,19 @@
 """Test docker image classes."""
 
+from os import path
+
 import pytest
+from pydantic import ValidationError
 
 from blowhole.core.image import BuildRecipe, ImageName, RunRecipe
+
+CURR_DIR = path.dirname(__file__)
+
+YAML_EMPTY = path.join(CURR_DIR, "files", "empty.yaml")
+
+IMAGENAME_FULL = path.join(CURR_DIR, "files", "imagename_full.yaml")
+IMAGENAME_PARTIAL = path.join(CURR_DIR, "files", "imagename_partial.yaml")
+IMAGENAME_INVALID = path.join(CURR_DIR, "files", "imagename_invalid.yaml")
 
 
 def test_imagename_instantiation() -> None:
@@ -71,6 +82,7 @@ def test_imagename_comparisons() -> None:
     fish2 = ImageName("fish", "3.6")
 
     assert fish1.is_compatible(fish2)
+    assert fish2.is_compatible(fish2)
     assert not fish2.is_compatible(fish1)
 
     frog1 = ImageName("Frog", "twenty-seven")
@@ -78,6 +90,32 @@ def test_imagename_comparisons() -> None:
 
     assert not frog1.is_compatible(frog2)
     assert not frog2.is_compatible(frog1)
+
+
+def test_imagename_load_from_empty() -> None:
+    """Test loading empty file as ImageName."""
+    with pytest.raises(TypeError):
+        with open(YAML_EMPTY) as fp:
+            ImageName.load_from_file(fp)
+
+
+def test_imagename_load_full() -> None:
+    """Test loading a full ImageName."""
+    with open(IMAGENAME_FULL) as fp:
+        assert ImageName.load_from_file(fp) == ImageName("banana", "13.76")
+
+
+def test_imagename_load_partial() -> None:
+    """Test loading a partial ImageName."""
+    with open(IMAGENAME_PARTIAL) as fp:
+        assert ImageName.load_from_file(fp) == ImageName("eee")
+
+
+def test_imagename_load_invalid() -> None:
+    """Test loading an invalid ImageName."""
+    with open(IMAGENAME_INVALID) as fp:
+        with pytest.raises(ValidationError):
+            ImageName.load_from_file(fp)
 
 
 def test_buildrecipe() -> None:

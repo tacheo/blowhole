@@ -5,9 +5,11 @@ from typing import List, Optional, Tuple
 
 from pydantic.dataclasses import dataclass
 
+from blowhole.core.config import ConfigModel
+
 
 @dataclass
-class ImageName:
+class ImageName(ConfigModel):
     """A class for docker image names, defining seperate repository and tags."""
 
     repository: str
