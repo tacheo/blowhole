@@ -35,8 +35,8 @@ rope = "^0.14.0"
 isort = {version = "^4.3",extras = ["pyproject"]}
 
 [tool.poetry.scripts]
-blowhole = 'blowhole.cli:cli.run'
-bh = 'blowhole.cli:cli.run'
+blowhole = 'blowhole.cli:cli'
+bh = 'blowhole.cli:cli'
 
 [build-system]
 requires = ["poetry>=0.12"]

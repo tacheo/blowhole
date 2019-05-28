@@ -1,7 +1,7 @@
 """Command Line Interface for Blowhole."""
 
-from .cli import run
+from .cli import cli
 
 __all__ = [
-    'run',
+    'cli',
 ]
