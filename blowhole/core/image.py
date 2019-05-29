@@ -1,7 +1,7 @@
 """Classes for docker images."""
 
 from dataclasses import field
-from typing import List, Optional, Set, Tuple
+from typing import List, Optional, Set, Tuple, TypeVar
 
 from pydantic.dataclasses import dataclass
 
@@ -72,6 +72,26 @@ class BuildRecipe(ConfigModel):
     def __iadd__(self, other: 'BuildRecipe') -> 'BuildRecipe':
         self.commands += other.commands
         return self
+
+
+T = TypeVar('T', Tuple[str, str], Tuple[int, int])
+
+
+def combine(first: Set[T], second: Set[T]) -> Set[T]:
+    """Combine two sets of tuples, prioritising the second."""
+    result = second.copy()
+    for pf in first:
+        include = True
+        for pr in result:
+            if pf[0] == pr[0]:
+                include = False
+                break
+            if pf[1] == pr[1]:
+                include = False
+                break
+        if include:
+            result.add(pf)
+    return result
 
 
 @dataclass
