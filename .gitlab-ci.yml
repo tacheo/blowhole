@@ -89,7 +89,7 @@ build:
 build-docs:
   stage: build
   script:
-  - make -C docs html
+  - poetry run make -C docs html
   artifacts:
     paths:
       - docs/_build/html
