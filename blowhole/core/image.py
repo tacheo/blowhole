@@ -56,6 +56,16 @@ class BuildRecipe(ConfigModel):
 
         return r
 
+    @property
+    def build_str(self) -> str:
+        """The string to insert into the Dockerfile."""
+        r = ""
+
+        for c in self.commands:
+            r += f"{c}\n"
+
+        return r
+
 
 @dataclass
 class RunRecipe(ConfigModel):

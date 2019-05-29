@@ -157,6 +157,19 @@ def test_buildrecipe_str() -> None:
     )
 
 
+def test_buildrecipe_build_str() -> None:
+    """Test Dockerfile strings from BuildRecipe."""
+    b1 = BuildRecipe([])
+    b2 = BuildRecipe(["FROM example:17", "RUN setup-1", "EXPOSE 8080"])
+
+    assert b1.build_str == ""
+    assert b2.build_str == (
+        "FROM example:17\n"
+        "RUN setup-1\n"
+        "EXPOSE 8080\n"
+    )
+
+
 def test_buildrecipe_repr() -> None:
     """Test evaluable string representation of BuildRecipe."""
     b1 = BuildRecipe([])
