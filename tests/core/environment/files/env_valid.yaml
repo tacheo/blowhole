@@ -1,0 +1,31 @@
+name: example-environment
+modules:
+- name: ubuntu
+  components:
+  - recipe:
+      commands:
+      - FROM ubuntu
+    results:
+      repository: ubuntu
+- name: zsh
+  components:
+  - recipe:
+      commands:
+      - "RUN apt update && apt install zsh"
+    compatible:
+      - repository: ubuntu
+      - repository: debian
+    description: "Installs zsh using apt."
+  - recipe:
+      commands:
+      - "RUN pacman -S zsh"
+    compatible:
+      - repository: arch
+      - repository: manjaro
+    description: "Installs zsh using pacman."
+  - recipe:
+      commands:
+      - CMD zsh
+    description: "Use zsh as the entry command."
+  - recipe:
+      ports: [[8080, 8080], [3000, 3000]]
