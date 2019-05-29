@@ -22,6 +22,8 @@ blowhole is currently in very early development, but should do something soon ho
    :maxdepth: 2
    :caption: Contents:
 
+   api/blowhole
+
 Indices and tables
 ==================
 
