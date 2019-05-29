@@ -66,6 +66,13 @@ class BuildRecipe(ConfigModel):
 
         return r
 
+    def __add__(self, other: 'BuildRecipe') -> 'BuildRecipe':
+        return BuildRecipe(self.commands + other.commands)
+
+    def __iadd__(self, other: 'BuildRecipe') -> 'BuildRecipe':
+        self.commands += other.commands
+        return self
+
 
 @dataclass
 class RunRecipe(ConfigModel):

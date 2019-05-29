@@ -181,6 +181,23 @@ def test_buildrecipe_repr() -> None:
     assert eval(repr(b2)) == b2
 
 
+def test_buildrecipe_add() -> None:
+    """Test adding build recipes."""
+    b1 = BuildRecipe()
+    b2 = BuildRecipe(["1", "2", "3"])
+    b3 = BuildRecipe()
+    b4 = BuildRecipe(["4", "5"])
+    b5 = BuildRecipe(["1", "2", "3", "4", "5"])
+
+    assert b1 + b2 + b3 + b4 == b5
+
+    b2 += b1
+    b2 += b4
+    b2 += b3
+
+    assert b2 == b5
+
+
 def test_buildrecipe_load_valid() -> None:
     """Test loading a valid BuildRecipe from file."""
     with open(BUILDRECIPE_VALID) as fp:
