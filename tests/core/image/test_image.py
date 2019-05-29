@@ -277,9 +277,9 @@ def test_runrecipe_str() -> None:
     assert str(r) == (
         "RunRecipe ("
         f"\n\tscript={['a']},"
-        f"\n\tports={[(1, 2)]},"
-        f"\n\tsockets={[('abc', 'def')]},"
-        f"\n\tvolumes={[('ping', 'pong')]},"
+        f"\n\tports={{(1, 2)}},"
+        f"\n\tsockets={{('abc', 'def')}},"
+        f"\n\tvolumes={{('ping', 'pong')}},"
         "\n)"
     )
 

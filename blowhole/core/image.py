@@ -1,7 +1,7 @@
 """Classes for docker images."""
 
 from dataclasses import field
-from typing import List, Optional, Tuple
+from typing import List, Optional, Set, Tuple
 
 from pydantic.dataclasses import dataclass
 
@@ -79,9 +79,9 @@ class RunRecipe(ConfigModel):
     """A set of instructions to set up a running image."""
 
     script: List[str] = field(default_factory=list)
-    ports: List[Tuple[int, int]] = field(default_factory=list)
-    sockets: List[Tuple[str, str]] = field(default_factory=list)
-    volumes: List[Tuple[str, str]] = field(default_factory=list)
+    ports: Set[Tuple[int, int]] = field(default_factory=set)
+    sockets: Set[Tuple[str, str]] = field(default_factory=set)
+    volumes: Set[Tuple[str, str]] = field(default_factory=set)
 
     def __str__(self) -> str:
         r = "RunRecipe ("
