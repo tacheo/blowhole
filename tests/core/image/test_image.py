@@ -157,6 +157,19 @@ def test_buildrecipe_str() -> None:
     )
 
 
+def test_buildrecipe_build_str() -> None:
+    """Test Dockerfile strings from BuildRecipe."""
+    b1 = BuildRecipe([])
+    b2 = BuildRecipe(["FROM example:17", "RUN setup-1", "EXPOSE 8080"])
+
+    assert b1.build_str == ""
+    assert b2.build_str == (
+        "FROM example:17\n"
+        "RUN setup-1\n"
+        "EXPOSE 8080\n"
+    )
+
+
 def test_buildrecipe_repr() -> None:
     """Test evaluable string representation of BuildRecipe."""
     b1 = BuildRecipe([])
@@ -166,6 +179,23 @@ def test_buildrecipe_repr() -> None:
 
     assert eval(repr(b1)) == b1
     assert eval(repr(b2)) == b2
+
+
+def test_buildrecipe_add() -> None:
+    """Test adding build recipes."""
+    b1 = BuildRecipe()
+    b2 = BuildRecipe(["1", "2", "3"])
+    b3 = BuildRecipe()
+    b4 = BuildRecipe(["4", "5"])
+    b5 = BuildRecipe(["1", "2", "3", "4", "5"])
+
+    assert b1 + b2 + b3 + b4 == b5
+
+    b2 += b1
+    b2 += b4
+    b2 += b3
+
+    assert b2 == b5
 
 
 def test_buildrecipe_load_valid() -> None:
@@ -186,9 +216,8 @@ def test_buildrecipe_load_invalid() -> None:
 
 def test_buildrecipe_load_empty() -> None:
     """Test loading empty yaml as a BuildRecipe."""
-    with pytest.raises(TypeError):
-        with open(YAML_EMPTY) as fp:
-            BuildRecipe.load_from_file(fp)
+    with open(YAML_EMPTY) as fp:
+        assert BuildRecipe.load_from_file(fp) == BuildRecipe()
 
 
 RUNRECIPE_VALID = path.join(CURR_DIR, "files", "runrecipe_valid.yaml")
@@ -248,13 +277,43 @@ def test_runrecipe_str() -> None:
     assert str(r) == (
         "RunRecipe ("
         f"\n\tscript={['a']},"
-        f"\n\tports={[(1, 2)]},"
-        f"\n\tsockets={[('abc', 'def')]},"
-        f"\n\tvolumes={[('ping', 'pong')]},"
+        f"\n\tports={{(1, 2)}},"
+        f"\n\tsockets={{('abc', 'def')}},"
+        f"\n\tvolumes={{('ping', 'pong')}},"
         "\n)"
     )
 
     assert eval(repr(r)) == r
+
+
+def test_runrecipe_add() -> None:
+    """Test adding together RunRecipes."""
+    r1 = RunRecipe()
+    r2 = RunRecipe(
+        script=["1", "2"],
+        ports={(1, 2), (3, 4), (128, 56)},
+        sockets={("s1", "s2")},
+        volumes={("v1", "v2")},
+    )
+    r3 = RunRecipe(
+        script=["1", "3", "17"],
+        ports={(57, 12), (79, 2), (128, 22)},
+        sockets={("s10", "s20")},
+        volumes={("v10", "v20")},
+    )
+    r4 = RunRecipe(
+        script=["1", "2", "1", "3", "17"],
+        ports={(3, 4), (57, 12), (79, 2), (128, 22)},
+        sockets={("s1", "s2"), ("s10", "s20")},
+        volumes={("v1", "v2"), ("v10", "v20")},
+    )
+
+    assert r2 + r3 == r4
+
+    r1 += r2
+    r1 += r3
+
+    assert r1 == r4
 
 
 def test_runrecipe_load_valid() -> None:
