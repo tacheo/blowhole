@@ -44,7 +44,7 @@ class ImageName(ConfigModel):
 class BuildRecipe(ConfigModel):
     """A set of instructions to build an image."""
 
-    commands: List[str]
+    commands: List[str] = field(default_factory=list)
 
     def __str__(self) -> str:
         r = "BuildRecipe ["

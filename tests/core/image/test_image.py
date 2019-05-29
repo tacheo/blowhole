@@ -199,9 +199,8 @@ def test_buildrecipe_load_invalid() -> None:
 
 def test_buildrecipe_load_empty() -> None:
     """Test loading empty yaml as a BuildRecipe."""
-    with pytest.raises(TypeError):
-        with open(YAML_EMPTY) as fp:
-            BuildRecipe.load_from_file(fp)
+    with open(YAML_EMPTY) as fp:
+        assert BuildRecipe.load_from_file(fp) == BuildRecipe()
 
 
 RUNRECIPE_VALID = path.join(CURR_DIR, "files", "runrecipe_valid.yaml")
