@@ -17,9 +17,9 @@ class Component(ConfigModel):
     results: Union[None, ImageName] = None
     description: Optional[str] = None
 
-    def should_run(self, source_image: ImageName) -> bool:
+    def should_run(self, source_image: Optional[ImageName]) -> bool:
         """Should this component be executed for a given source image."""
-        if self.compatible is None:
+        if self.compatible is None or source_image is None:
             return True
         else:
             for image in self.compatible:
