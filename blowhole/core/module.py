@@ -14,6 +14,7 @@ class Component(ConfigModel):
 
     recipe: Union[BuildRecipe, RunRecipe]
     compatible: Optional[List[ImageName]] = None
+    results: Union[None, ImageName] = None
     description: Optional[str] = None
 
     def should_run(self, source_image: ImageName) -> bool:

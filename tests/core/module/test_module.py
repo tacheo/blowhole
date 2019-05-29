@@ -22,6 +22,7 @@ def test_component_initialisation() -> None:
     Component(
         RunRecipe(script=["a", "b"]),
         [ImageName.from_str("a/b:c"), ImageName("qwerty", "uiop")],
+        None,
         "does absolutely nothing",
     )
 
