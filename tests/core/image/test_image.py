@@ -286,6 +286,36 @@ def test_runrecipe_str() -> None:
     assert eval(repr(r)) == r
 
 
+def test_runrecipe_add() -> None:
+    """Test adding together RunRecipes."""
+    r1 = RunRecipe()
+    r2 = RunRecipe(
+        script=["1", "2"],
+        ports={(1, 2), (3, 4), (128, 56)},
+        sockets={("s1", "s2")},
+        volumes={("v1", "v2")},
+    )
+    r3 = RunRecipe(
+        script=["1", "3", "17"],
+        ports={(57, 12), (79, 2), (128, 22)},
+        sockets={("s10", "s20")},
+        volumes={("v10", "v20")},
+    )
+    r4 = RunRecipe(
+        script=["1", "2", "1", "3", "17"],
+        ports={(3, 4), (57, 12), (79, 2), (128, 22)},
+        sockets={("s1", "s2"), ("s10", "s20")},
+        volumes={("v1", "v2"), ("v10", "v20")},
+    )
+
+    assert r2 + r3 == r4
+
+    r1 += r2
+    r1 += r3
+
+    assert r1 == r4
+
+
 def test_runrecipe_load_valid() -> None:
     """Test loading a valid run recipe from file."""
     with open(RUNRECIPE_VALID) as fp:

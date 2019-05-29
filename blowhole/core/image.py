@@ -121,3 +121,18 @@ class RunRecipe(ConfigModel):
         r += "\n)"
 
         return r
+
+    def __add__(self, other: 'RunRecipe') -> 'RunRecipe':
+        return RunRecipe(
+            self.script + other.script,
+            combine(self.ports, other.ports),
+            combine(self.sockets, other.sockets),
+            combine(self.volumes, other.volumes),
+        )
+
+    def __iadd__(self, other: 'RunRecipe') -> 'RunRecipe':
+        self.script += other.script
+        self.ports = combine(self.ports, other.ports)
+        self.sockets = combine(self.sockets, other.sockets)
+        self.volumes = combine(self.volumes, other.volumes)
+        return self
