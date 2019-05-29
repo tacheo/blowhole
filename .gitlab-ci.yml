@@ -85,3 +85,15 @@ build:
     paths:
     - .venv
     policy: pull
+
+build-docs:
+  stage: build
+  script:
+  - make -C docs html
+  artifacts:
+    paths:
+      - docs/_build/html
+  cache:
+    paths:
+      - .venv
+    policy: pull
