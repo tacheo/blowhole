@@ -3,6 +3,7 @@
 import click
 
 from blowhole import __version__
+from blowhole.cli.env import env
 
 
 @click.group('bh', invoke_without_command=True)
@@ -22,3 +23,6 @@ def cli(ctx: click.Context) -> None:
 def version() -> None:
     """Display the version."""
     click.echo(f"Blowhole v{__version__}")
+
+
+cli.add_command(env)
