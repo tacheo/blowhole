@@ -1,5 +1,6 @@
 """Test environment classes."""
 
+from io import StringIO
 from os import path
 
 import pytest
@@ -105,3 +106,31 @@ def test_environmentdefinition_recipe() -> None:
 
     with open(ENV_VALID) as fp:
         assert EnvironmentDefinition.load_from_file(fp).recipe == r
+
+
+def test_environmentdefinition_dockerfile_str() -> None:
+    """Test outputting dockerfiles from environment definitions."""
+    d = (
+        "FROM ubuntu\n"
+        "RUN apt update && apt install zsh\n"
+        "CMD zsh\n"
+    )
+
+    with open(ENV_VALID) as fp:
+        assert EnvironmentDefinition.load_from_file(fp).recipe.dockerfile_str == d
+
+
+def test_environmentdefinition_dockerfile() -> None:
+    """Test creating file-like dockerfiles from environment definitions."""
+    d1 = StringIO(
+        "FROM ubuntu\n"
+        "RUN apt update && apt install zsh\n"
+        "CMD zsh\n",
+    )
+
+    with open(ENV_VALID) as fp:
+        d2 = EnvironmentDefinition.load_from_file(fp).recipe.dockerfile
+
+    with d1:
+        with d2:
+            assert d1.read() == d2.read()

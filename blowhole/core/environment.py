@@ -1,6 +1,7 @@
 """Build containers and images."""
 
-from typing import List, Optional
+from io import StringIO
+from typing import List, Optional, TextIO
 
 from pydantic.dataclasses import dataclass
 
@@ -16,6 +17,19 @@ class EnvironmentRecipe:
     build: BuildRecipe
     run: RunRecipe
     name: Optional[str] = None
+
+    @property
+    def dockerfile_str(self) -> str:
+        """The Dockerfile string to build this environment."""
+        r = ""
+        for c in self.build.commands:
+            r += f"{c}\n"
+        return r
+
+    @property
+    def dockerfile(self) -> TextIO:
+        """The file-like Dockerfile to build this environment."""
+        return StringIO(self.dockerfile_str)
 
 
 @dataclass
